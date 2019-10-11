@@ -34,9 +34,7 @@ io.on("connection", socket => {
     cb();
   });
 
-  socket.on("disconnect", () => {
-    console.log("User left");
-  });
+  socket.on("disconnect", () => {});
 });
 
 app.use(router);
