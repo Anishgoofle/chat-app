@@ -16,19 +16,23 @@ io.on("connection", socket => {
     const { error, user } = addUser({ id: socket.id, name, room });
 
     if (error) return cb(error);
+
+    socket.join(user.room);
+
     socket.emit("message", {
       user: "admin",
       text: `${user.name} welcome to ${user.room}`
     });
+
     socket.broadcast
       .to(user.room)
-      .emit("message", { user: "admin", text: `${user.name} has joined` });
-    socket.join(user.room);
+      .emit("message", { user: "admin", text: `${user.name} has joined!` });
 
     io.to(user.room).emit("roomData", {
       room: user.room,
       users: getUsersInRoom(user.room)
     });
+
     cb();
   });
 
@@ -36,6 +40,7 @@ io.on("connection", socket => {
     const user = getUser(socket.id);
 
     io.to(user.room).emit("message", { user: user.name, text: message });
+
     io.to(user.room).emit("roomData", {
       room: user.room,
       users: getUsersInRoom(user.room)
@@ -51,6 +56,11 @@ io.on("connection", socket => {
       io.to(user.room).emit("message", {
         user: "admin",
         text: `${user.name} has left.`
+      });
+
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room)
       });
     }
   });
