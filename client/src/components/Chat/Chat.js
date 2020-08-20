@@ -15,7 +15,7 @@ const Chat = ({ location }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const ENDPOINT = "https://pure-sierra-66529.herokuapp.com/";
+  const ENDPOINT = "https://round-table-be.herokuapp.com/";
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
